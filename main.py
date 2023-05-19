@@ -8,9 +8,9 @@ import threading
 import time
 import tkinter as tk
 from tkinter import ttk
-from typing import List, Dict, Callable, Union
+from typing import List, Dict, Callable, Union, Tuple
 
-from _secret import *
+from _secret import WHITE_LIST_IP, SECRET_KEY
 
 # 常量区
 PORT = 56789
@@ -221,6 +221,8 @@ class Treat:
                 self.o('-> MD5: %s\n', md5)
                 if not RE_MD5.match(md5):
                     return 'MD5值不正确'
+                if md5 == 'F' * 32:
+                    return '客户端计算MD5失败！'
                 name_size = self.bytes_2_int(recv['name_size'])
                 content_size = self.bytes_2_int(recv['content_size'])
                 self.o('-> name_size: %d\n', name_size)
