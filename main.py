@@ -1,6 +1,5 @@
 import os
 import re
-import shutil
 import socket
 import sqlite3
 import sys
@@ -16,7 +15,7 @@ from _secret import WHITE_LIST_IP, SECRET_KEY
 PORT = 56789
 SAVE_FILE_PATH = './file/%s'
 DATABASE_PATH = './copier_server_database.db'
-RE_MD5 = re.compile(r'^[0-9A-F]{32}$', re.IGNORECASE)
+RE_MD5 = re.compile(r'^[0-9A-Fa-z]{32}$')
 
 
 def change_stdout(status: bool):
@@ -161,7 +160,7 @@ class Treat:
     def __init__(self, app_obj: 'App'):
         self.app_obj = app_obj
         self.ver_map: Dict[bytes, Callable[[socket.socket], int]] = {
-            bytes([0b10000101]): self.version_2_1
+            bytes([0o211]): self.version_2_1
         }
 
     def o(self, formatter: str, *args):
@@ -400,10 +399,6 @@ class DataBase:
 
 
 if __name__ == '__main__':
-    if os.path.exists(SAVE_FILE_PATH % ''):
-        shutil.rmtree(SAVE_FILE_PATH % '')
-    if os.path.exists(DATABASE_PATH):
-        os.remove(DATABASE_PATH)
     app = App()
     # 修改标准输出
     saved_stdout = sys.stdout
